@@ -23,10 +23,17 @@
 
   <style>
 
-    /*
-      misc styles, nothing to do with CSS variables
-    */
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter:blur(var(--blur));
+    }
     body {
       text-align: center;
       background: #193549;
@@ -46,6 +53,27 @@
   </style>
 
   <script>
+
+    const controls = document.querySelectorAll('.controls input');
+    const image = document.querySelector('img');
+
+    function handleUpdate(){
+      if(this.id === 'blur'){
+        document.documentElement.style.setProperty(`--blur`, this.value + 'px');
+      }
+      else if(this.id === 'spacing'){
+        document.documentElement.style.setProperty(`--spacing`, this.value + 'px');
+      }
+      else {
+        document.documentElement.style.setProperty(`--base`, this.value);
+      }
+    }
+
+    controls.forEach(element => {
+      element.addEventListener('change', handleUpdate);
+    });
+
+
   </script>
 
 </body>
