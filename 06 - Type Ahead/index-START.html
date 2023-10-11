@@ -18,6 +18,42 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const cities = []
+
+fetch(endpoint).then(data => data.json()).then(jsondata => cities.push(...jsondata))
+
+function findMatches(word, cities){
+  return cities.filter(place => {
+    const regex = new RegExp(word, 'gi');
+    return place.city.match(regex) || place.state.match(regex);
+  })
+}
+
+const handleInput = (event) =>{
+  const word = event.target.value;
+  const matchedCities = findMatches(word, cities);
+  populateDOM(matchedCities);
+}
+
+function populateDOM(matchedCities){
+  const html = matchedCities.map(place => {
+    return `
+    <li> 
+      <span class="name">${place.city}, ${place.state}</span>  
+      <span class="population">${place.population}</span>
+    </li>
+    `;
+  }).join('');
+
+  const suggestions = document.querySelector('.suggestions');
+
+  suggestions.innerHTML = html;
+}
+const searchBox = document.querySelector('input');
+// "change" event listener only changes the value of the input box when the input box has lost focus, but the "input" event listener also updated the value of the box as soon as the values is changed in any way
+
+searchBox.addEventListener("input", handleInput)
+
 </script>
 </body>
 </html>
